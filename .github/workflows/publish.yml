@@ -2,7 +2,7 @@ name: Flutter Web
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   build:
     name: Build Web
@@ -10,13 +10,24 @@ jobs:
       my_secret: ${{secrets.commit_secret}}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
-          channel: 'dev'
+          channel: 'stable' # or: 'beta' or 'master'
+      - run: flutter --version
+
       - run: flutter config --enable-web
       - run: flutter pub get
       - run: flutter build web --release
+      - name: Copy folder content recursively to remote
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: build/web
+          remote: /var/www/pruebaprueba.tochecker.com/html
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.PASSWORD }}
+
       - run: |
           cd build/web
           git init
