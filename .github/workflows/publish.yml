@@ -23,7 +23,7 @@ jobs:
         uses: garygrossgarten/github-action-scp@release
         with:
           local: build/web
-          remote: /home/bits/Documents/prueba_cicd
+          remote: /var/www/pruebaprueba.tochecker.com/html
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.PASSWORD }}
